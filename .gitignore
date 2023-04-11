@@ -125,3 +125,6 @@ dist
 # ignore snapshots
 __snapshots__/
 debug.log
+
+/build
+/dist
