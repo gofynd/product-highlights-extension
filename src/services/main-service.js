@@ -11,11 +11,8 @@ const MainService = {
   getAllApplications(params = {}) {
     return axios.get(URLS.GET_ALL_APPLICATIONS());
   },
-  getAllProducts(application_id, pageNo=1, pageSize=5) {
-    return axios.get(URLS.GET_PRODUCTS(application_id), {params: {pageNo, pageSize}});
-  },
-  getProductDetail(application_id, product_slug) {
-    return axios.get(URLS.GET_PRODUCT_DETAIL(application_id, product_slug))
+  getAllProducts(application_id, query) {
+    return axios.get(URLS.GET_PRODUCTS(application_id), {params: {query}});
   },
   createProductHighlights(application_id, item_id, data) {
     return axios.post(URLS.CREATE_PRODUCT_HIGHLIGHTS(application_id, item_id), data);

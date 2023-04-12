@@ -20,7 +20,7 @@ export default function CreateHighlight() {
   /** { STATES } */
   // application product list
   const [productItems, setProductItems] = useState([]);
-  const [pageMeta, setPageMeta] = useState({});
+  const [searchText, setSearchText] = useState('');
 
   // highlight text input
   const [highlightInput, setHighlightInput] = useState("");
@@ -39,9 +39,14 @@ export default function CreateHighlight() {
   const [checkboxValue, setCheckboxValue] = useState(false);
 
 
+  // handle dropdown search
   useEffect(() => {
-    getApplicationProductList();
-  }, [])
+    const delayDebounceFn = setTimeout(() => {
+      console.log(searchText)
+      getApplicationProductList();
+    }, 500)
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchText])
 
 
   // application product list for dropdown
@@ -61,9 +66,8 @@ export default function CreateHighlight() {
       })
       
     } else {
-      const { data } = await MainService.getAllProducts(application_id, 1, 20);
+      const { data } = await MainService.getAllProducts(application_id, searchText);
       setProductItems(data.items);
-      setPageMeta(data.page)
     }
   }
 
@@ -209,8 +213,8 @@ export default function CreateHighlight() {
                   placeholder="select product"
                   searchable={true}
                   items={getSearchItems()}
-                  onChange={(productMeta) => {dropdownChangeHandler(productMeta)}}
-                  // onSearchInputChange={() => {}} // TODO: handle search
+                  onChange={(productMeta) => {dropdownChangeHandler(productMeta);}}
+                  onSearchInputChange={(e) => {setSearchText(e.text);}}
                 />
               </div>
             ) : (

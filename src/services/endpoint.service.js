@@ -20,9 +20,6 @@ const Endpoints = {
   GET_PRODUCTS(application_id) {
     return urlJoin(envVars.EXAMPLE_MAIN_URL, `api/v1.0/${application_id}/products`);
   },
-  GET_PRODUCT_DETAIL(application_id, product_slug) {
-    return urlJoin(envVars.EXAMPLE_MAIN_URL, `api/v1.0/${application_id}/product/${product_slug}`);
-  },
   CREATE_PRODUCT_HIGHLIGHTS(application_id, item_id) {
     return urlJoin(envVars.EXAMPLE_MAIN_URL, `api/v1.0/${application_id}/product/${item_id}/highlights`);
   },

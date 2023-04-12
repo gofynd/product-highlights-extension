@@ -41,10 +41,11 @@ router.get('/:application_id/products', async function view(req, res, next) {
     try {
         const { platformClient } = req;
         const { application_id } = req.params;
-        const { pageNo, pageSize } = req.query;
+        const { query } = req.query;
         let response = await platformClient.application(application_id).catalog.getAppProducts({
-            pageNo: pageNo,
-            pageSize: pageSize,
+            pageNo: 1,
+            pageSize: 10,
+            q: query
         })
         return res.status(200).json(response)
     } catch(error) {
