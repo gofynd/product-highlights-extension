@@ -53,21 +53,6 @@ router.get('/:application_id/products', async function view(req, res, next) {
 })
 
 
-// get product detail
-router.get('/:application_id/product/:product_slug', async function view(req, res, next) {
-    try {
-        const { platformClient } = req;
-        const { application_id, product_slug } = req.params;
-
-        let response = await platformClient.application(application_id).catalog.getProductDetailBySlug({slug: product_slug});
-        return res.status(200).json(response);
-
-    } catch(error) {
-        next(error);
-    }
-})
-
-
 // update product highlights
 router.post("/:application_id/product/:item_id/highlights", async function view(req, res, next) {
     try {

@@ -2,10 +2,13 @@ const { ProductHighlightRecord, PriceDropRecord } = require('./db/mongo')
 
 const productPriceUpdateHandler = async (eventName, { payload }, companyId, applicationId) => {
 
+  // check if pyload has articles object or not 
+  // if not exists then return
   if (!payload.articles) {
     return 
   } else {
     payload.articles.forEach(async (article) => {
+      
       // fetch record from database
       let data = await ProductHighlightRecord.findOne(
         {company_id: companyId, product_item_code: article.item_id}
