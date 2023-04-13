@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -17,7 +15,6 @@ export default function CreateHighlight() {
   // navigation instance
   const navigate = useNavigate();
 
-  /** { STATES } */
   // application product list
   const [productItems, setProductItems] = useState([]);
   const [searchText, setSearchText] = useState('');

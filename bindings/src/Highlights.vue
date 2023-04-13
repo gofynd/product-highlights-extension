@@ -17,7 +17,7 @@ import axios from 'axios';
 import urlJoin from "url-join";
 
 export default {
-  name: "Highlights",
+  name: "ProductHighlights",
   
   data() {
     return {
@@ -40,16 +40,16 @@ export default {
 
 <style>
 .highlightTitle {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
   color: #000000;
-  padding: 32px 0 18px 0;
+  padding: 32px 0 6px 0;
 }
 
 .highlightList {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   color: #000000;
-  padding: 10px 0;
+  padding: 8px 0;
 }
 </style>

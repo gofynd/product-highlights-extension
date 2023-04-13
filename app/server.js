@@ -29,7 +29,6 @@ app.get('/env.js', (req, res) => {
 app.use("/", healthzRouter);
 app.use(express.static(path.resolve(__dirname, "../build/")));
 app.use('/bindings/product-highlights', express.static(path.join(__dirname, '../bindings/dist')))
-// app.use('/bindings/product-highlights', express.static(path.join(__dirname, '../bindings/dist')))
 app.use("/", fdkExtension.fdkHandler);
 
 
@@ -59,11 +58,11 @@ app.get('*', (req, res) => {
 // webhook handler
 app.post('/ext/product-highlight-webhook', async function(req, res) {
   try {
-    console.log("1");
+    console.log(`Webhook Event: ${req.body.event} received`)
     await fdkExtension.webhookRegistry.processWebhook(req);
     return res.status(200).json({"success": true});
   } catch(err) {
-    console.log(2);
+    console.log(`Error Processing ${req.body.event} Webhook`);
     return res.status(500).json({"success": false});
   }
 })

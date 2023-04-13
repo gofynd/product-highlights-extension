@@ -17,6 +17,21 @@ let fdkExtension = setupFdk({
         uninstall: async (req) => {
             // Write your code here to cleanup data related to extension
             // If task is time taking then process it async on other process.
+            const { company_id } = req.body;
+            const { ProductHighlightRecord, ProxyRecord } = require('../db/mongo')
+            await ProductHighlightRecord.bulkWrite([{
+                updateMany: {
+                    "filter": {
+                        "company_id": company_id
+                    },
+                    "update": {
+                        $set: {
+                            "is_active": false
+                        }
+                    }
+                }
+            }]);
+            await ProxyRecord.deleteMany({ company_id: company_id });
         }
     },
     // debug: true,
