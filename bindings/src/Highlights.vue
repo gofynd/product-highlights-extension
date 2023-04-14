@@ -29,7 +29,10 @@ export default {
     const baseURL = window.location.origin;
     const product_slug = this.$route.params.slug;
 
-    let { data } = await axios.get(urlJoin(baseURL, 'ext/producthighlights/highlight'), {params: {slug: product_slug}});
+    let { data } = await axios.get(
+      urlJoin(baseURL, 'ext/producthighlights/highlight'), 
+      { params: {slug: product_slug}, headers: {"ngrok-skip-browser-warning": true} }
+    );
     
     if (data && data.is_active && data.product && data.product.highlights && data.product.highlights.length) {
       this.highlightsData = data.product.highlights

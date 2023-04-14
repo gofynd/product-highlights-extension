@@ -23,7 +23,10 @@ export default {
     const baseURL = window.location.origin;
     const product_slug = this.$route.params.slug;
 
-    let { data } = await axios.get(urlJoin(baseURL, 'ext/producthighlights/price-drop'), {params: {slug: product_slug}});
+    let { data } = await axios.get(
+      urlJoin(baseURL, 'ext/producthighlights/price-drop'), 
+      { params: {slug: product_slug}, headers: { "ngrok-skip-browser-warning": true } }
+    );
 
     if (data && data.showPriceDrop) {
       this.showPriceDrop = true;

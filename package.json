@@ -25,8 +25,8 @@
     "window-or-global": "^1.0.1"
   },
   "scripts": {
-    "serve": "node index.js",
-    "start": "react-scripts start",
+    "start": "node index.js",
+    "serve": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest --updateSnapshot --projects src app --no-cache --detectOpenHandles --json --outputFile=./coverage/coverage.json",
     "eject": "react-scripts eject"
