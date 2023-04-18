@@ -1,0 +1,33 @@
+version: '3'
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: app
+    depends_on:
+      - redis-cache
+      - mongo-db
+    ports:
+      - "3000:3000"
+    env_file: .env
+    environment:
+      PORT: 3000
+      REDIS_EXTENSIONS_READ_WRITE: redis://redis-cache:6379/0
+      MONGODB_URI: mongodb://mongo-db:27017/productHighlightsExt
+    entrypoint: ["npm", "run", "start"]
+  redis-cache:
+    image: redis:6.2-alpine
+    logging:
+      driver: none
+    ports:
+      - "6379:6379"
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning
+  mongo-db:
+    image: mongo
+    logging:
+      driver: none
+    command: mongod --quiet --logpath /dev/null 
+    restart: always
