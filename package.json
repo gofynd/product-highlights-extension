@@ -5,14 +5,9 @@
   "dependencies": {
     "@gofynd/fdk-client-javascript": "^1.0.0",
     "@gofynd/nitrozen-react": "^2.0.2",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.1",
-    "bootstrap": "^5.2.3",
     "convict": "^6.2.3",
     "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
     "fdk-extension-javascript": "git+https://github.com/gofynd/fdk-extension-javascript.git#v0.5.3",
     "ioredis": "^5.2.2",
     "mongoose": "^7.0.3",
@@ -23,6 +18,11 @@
     "url-join": "^5.0.0",
     "web-vitals": "^2.1.4",
     "window-or-global": "^1.0.1"
+  }, 
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0"
   },
   "scripts": {
     "start": "node index.js",

@@ -40,7 +40,7 @@ let fdkExtension = setupFdk({
     cluster: config.extension.fp_api_server, // this is optional by default it points to prod.
     webhook_config: {
         api_path: "/ext/product-highlight-webhook",
-        notification_email: "meetkoriya@fynd.com",
+        notification_email: "dev@fynd.com",
         event_map: {
             "company/article/update": {
                 "handler": productPriceUpdateHandler,
