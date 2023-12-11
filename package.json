@@ -8,7 +8,7 @@
     "axios": "^1.2.1",
     "convict": "^6.2.3",
     "cookie-parser": "^1.4.6",
-    "fdk-extension-javascript": "git+https://github.com/gofynd/fdk-extension-javascript.git#v0.5.3",
+    "fdk-extension-javascript": "git+https://github.com/gofynd/fdk-extension-javascript.git#framework-agnostic",
     "ioredis": "^5.2.2",
     "mongoose": "^7.0.3",
     "react": "^18.2.0",
