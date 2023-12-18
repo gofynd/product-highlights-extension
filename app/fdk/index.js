@@ -1,5 +1,5 @@
-const { setupFdk } = require("fdk-extension-javascript/express");
-const { RedisStorage } = require("fdk-extension-javascript/express/storage");
+const { setupFdk } = require("fdk-extension-javascript/fastify");
+const { RedisStorage } = require("fdk-extension-javascript/storage");
 const config =  require("../config");
 const { appRedis } = require("./../common/redis.init");
 const { productPriceUpdateHandler } = require('../webhook')
