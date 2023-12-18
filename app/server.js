@@ -1,18 +1,19 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
+const fastify = require("fastify");
 const path = require("path");
-const healthzRouter = require("./routes/healthz.router");
+//const healthzRouter = require("./routes/healthz.router");
 const productRouter = require("./routes/product.router");
 const scriptRouter = require("./routes/script.router");
 const appRouter = require("./routes/app.router");
 const fdkExtension = require("./fdk");
-const app = express();
+const app = fastify({logger: true});
+app.register(require('@fastify/cookie'), {
+  secret: ['ext.session']
+});
+app.register(require('@fastify/static'), {
+  root: path.join(__dirname, '../build'),
+  prefix: '/',
+})
 const config = require("./config");
-app.use(cookieParser("ext.session"));
-app.use(bodyParser.json({
-    limit: '2mb'
-}));
 app.get('/env.js', (req, res) => {
     const commonEnvs = {
       base_url: config.extension.base_url
@@ -26,32 +27,50 @@ app.get('/env.js', (req, res) => {
       )}`
     );
 });
-app.use("/", healthzRouter);
-app.use(express.static(path.resolve(__dirname, "../build/")));
-app.use('/bindings/product-highlights', express.static(path.join(__dirname, '../bindings/dist')))
-app.use("/", fdkExtension.fdkHandler);
+
+//app.use("/", healthzRouter);
+//app.use('/bindings/product-highlights', express.static(path.join(__dirname, '../bindings/dist')))
 
 
 // platform routes
-const apiRoutes = fdkExtension.apiRoutes;
-apiRoutes.use('/v1.0', productRouter);
-apiRoutes.use('/v1.0', scriptRouter);
-app.use('/api', apiRoutes);
+const apiRoutes = async (fastify, options) => {
+  fastify.addHook('preHandler', async (req, res) => {
+      try {
+          const companyId = req.headers['x-company-id'] || req.query['company_id'];
+          const compCookieName = `ext_session_${companyId}`
+          let cookieName = req.cookies[compCookieName] || '';
+          let sessionId = req.unsignCookie(cookieName).value;
+          req.fdkSession = await fdkExtension.middlewares.isAuthorized(sessionId);
+          if (!req.fdkSession) {
+              return res.status(401).send({ "message": "unauthorized" });
+          }
+      } catch (error) {
+          throw error
+      }
+  });
+
+  fastify.register(productRouter, { prefix: '/api/v1.0' });
+  fastify.register(scriptRouter, { prefix: '/api/v1.0' });
+};
+
 
 
 // application routes
-const applicationProxyRoutes = fdkExtension.applicationProxyRoutes
-applicationProxyRoutes.use("/proxy", appRouter);
-app.use('/app', applicationProxyRoutes);
+const applicationProxyRoutes = async (fastify, options) => {
+  fastify.register(fdkExtension.applicationProxyRoutes);
+
+  fastify.register(appRouter, { prefix: '/app/proxy' });
+};
 
 
 app.get('/company/:company_id', (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../build/index.html"))
-})
+  res.sendFile("/index.html");
+});
 
-app.get('*', (req, res) => {
-  res.contentType('text/html');
-  res.sendFile(path.resolve(__dirname, '../build/index.html'))
+
+
+app.get('/another/path', (req, res) => {
+  res.sendFile('index.html')
 });
 
 
@@ -60,11 +79,14 @@ app.post('/ext/product-highlight-webhook', async function(req, res) {
   try {
     console.log(`Webhook Event: ${req.body.event} received`)
     await fdkExtension.webhookRegistry.processWebhook(req);
-    return res.status(200).json({"success": true});
+    return res.status(200).send({"success": true});
   } catch(err) {
     console.log(`Error Processing ${req.body.event} Webhook`);
-    return res.status(500).json({"success": false});
+    return res.status(500).send({"success": false});
   }
 })
+app.register(fdkExtension.fdkHandler);
+app.register(apiRoutes);
+app.register(applicationProxyRoutes);
 
 module.exports = app;
